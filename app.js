@@ -37,6 +37,12 @@ function Game(table) {
         _draw.draw(newarr, _playerPos);
     }
 
+    function randomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     // Checks to see if two items are overlapping and takes the nessisary action
     function gameCheck() {
         if (_grid[_playerPos[0]][_playerPos[1]] === "f") {
@@ -58,7 +64,7 @@ function Game(table) {
 
     // Spawns a fire randomly in the room
     function spawnFire() {
-      
+
     }
 
     // Spawns water randomly in the room
