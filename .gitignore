@@ -1,2 +1,3 @@
-*config.codekit
-*config.codekit3
+*.codekit
+*.codekit3
+min/
