@@ -51,6 +51,7 @@ function Game(table) {
                 gameOver();
             } else {
                 _score++;
+                water--;
                 spawn(_playerPos[0], _playerPos[1], "g");
             }
 
@@ -65,7 +66,7 @@ function Game(table) {
 
     // Spawns a fire randomly in the room
     function spawnFire() {
-      if (0.000002 < Math.random()) {
+      if (0.05 > Math.random()) {
         var rand2 = randomInt(0, _height -1);
         var rand1 = randomInt(0, _width -1);
         if (rand1 === _playerPos[0] && rand2 === _playerPos[1]) {
