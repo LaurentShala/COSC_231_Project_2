@@ -52,6 +52,7 @@ function Game(table) {
                     gameOver();
                 } else {
                     _score++;
+                    _water--;
                     spawn(_playerPos[0], _playerPos[1], "g");
                 }
                 break;
