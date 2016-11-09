@@ -32,6 +32,7 @@ function Game(table) {
     // Randomly spawn fires and spawn water when nessisary
     // JSON Deep copy hack found on http://stackoverflow.com/questions/3978492/javascript-fastest-way-to-duplicate-an-array-slice-vs-for-loop
     function gameTick() {
+        spawnFire();
         gameCheck();
         var newarr = JSON.parse(JSON.stringify(_grid)); //Deep copy of the array
         _draw.draw(newarr, _playerPos);
@@ -64,6 +65,11 @@ function Game(table) {
 
     // Spawns a fire randomly in the room
     function spawnFire() {
+      var rand1 = randomInt(0, _width -1);
+      var rand2 = randomInt(0, _height -1);
+
+      alert(rand1);
+      alert(rand2);
 
     }
 
