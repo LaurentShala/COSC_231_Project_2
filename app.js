@@ -65,12 +65,14 @@ function Game(table) {
 
     // Spawns a fire randomly in the room
     function spawnFire() {
-      var rand1 = randomInt(0, _width -1);
-      var rand2 = randomInt(0, _height -1);
-
-      alert(rand1);
-      alert(rand2);
-
+      if (0.000002 < Math.random()) {
+        var rand2 = randomInt(0, _height -1);
+        var rand1 = randomInt(0, _width -1);
+        if (rand1 === _playerPos[0] && rand2 === _playerPos[1]) {
+          return;
+        }
+        spawn(rand1, rand2, "f");
+      }
     }
 
     // Spawns water randomly in the room
@@ -80,6 +82,7 @@ function Game(table) {
 
     // Ends the game setting the highscore in a cookie
     function gameOver() {
+        alert("DIE");
         clearInterval(_game);
     }
 
