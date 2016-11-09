@@ -68,9 +68,6 @@ function Game(table) {
       var rand1 = randomInt(0, _width -1);
       var rand2 = randomInt(0, _height -1);
 
-      alert(rand1);
-      alert(rand2);
-
     }
 
     // Spawns water randomly in the room
