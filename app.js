@@ -1,4 +1,3 @@
-
 //Game Logic
 function Game(table) {
     var _grid = [],
@@ -33,29 +32,34 @@ function Game(table) {
     // JSON Deep copy hack found on http://stackoverflow.com/questions/3978492/javascript-fastest-way-to-duplicate-an-array-slice-vs-for-loop
     function gameTick() {
         spawnFire();
+        spawnWater();
         gameCheck();
         var newarr = JSON.parse(JSON.stringify(_grid)); //Deep copy of the array
         _draw.draw(newarr, _playerPos);
     }
 
     function randomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     // Checks to see if two items are overlapping and takes the nessisary action
     function gameCheck() {
-        if (_grid[_playerPos[0]][_playerPos[1]] === "f") {
-            if (_water === 0) {
-                gameOver();
-            } else {
-                _score++;
+        switch (_grid[_playerPos[0]][_playerPos[1]]) {
+            case "f":
+                if (_water === 0) {
+                    gameOver();
+                } else {
+                    _score++;
+                    spawn(_playerPos[0], _playerPos[1], "g");
+                }
+                break;
+
+            case "w":
+                _water++;
                 spawn(_playerPos[0], _playerPos[1], "g");
-            }
-
-        } else if (_grid[_playerPos[0]][_playerPos[1]] === "w") {
-
+                break;
         }
     }
 
@@ -65,18 +69,32 @@ function Game(table) {
 
     // Spawns a fire randomly in the room
     function spawnFire() {
-      var rand1 = randomInt(0, _width -1);
-      var rand2 = randomInt(0, _height -1);
-
+        if (0.02 > Math.random()) {
+            var rand2 = randomInt(0, _height - 1);
+            var rand1 = randomInt(0, _width - 1);
+            if (rand1 === _playerPos[0] && rand2 === _playerPos[1]) {
+                return;
+            }
+            spawn(rand1, rand2, "f");
+        }
     }
 
     // Spawns water randomly in the room
     function spawnWater() {
+        if (0.018 > Math.random()) {
+            var rand2 = randomInt(0, _height - 1);
+            var rand1 = randomInt(0, _width - 1);
+            if (rand1 === _playerPos[0] && rand2 === _playerPos[1]) {
+                return;
+            }
+            spawn(rand1, rand2, "w");
+        }
 
     }
 
     // Ends the game setting the highscore in a cookie
     function gameOver() {
+        alert("DIE");
         clearInterval(_game);
     }
 
@@ -125,13 +143,6 @@ function Game(table) {
 
 
 
-
-
-
-
-
-
-
 //Visual Module
 function Draw() {
     var obj = {
@@ -141,7 +152,7 @@ function Draw() {
     function draw(worldArray, playerPosArray) {
         var counter = 0;
         var table = document.querySelectorAll("td");
-        worldArray[playerPosArray[0]][playerPosArray[1]] = "w";
+        worldArray[playerPosArray[0]][playerPosArray[1]] = "p";
 
         for (var i = 0; i < worldArray.length; i++) {
             for (var j = 0; j < worldArray[i].length; j++) {
@@ -150,7 +161,15 @@ function Draw() {
                         table[counter].style.backgroundColor = "green";
                         break;
 
+                    case "f":
+                        table[counter].style.backgroundColor = "red";
+                        break;
+
                     case "w":
+                        table[counter].style.backgroundColor = "blue";
+                        break;
+
+                    case "p":
                         table[counter].style.backgroundColor = "purple";
                         break;
                 }
