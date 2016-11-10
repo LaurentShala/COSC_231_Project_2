@@ -170,19 +170,19 @@ function Draw() {
             for (var j = 0; j < worldArray[i].length; j++) {
                 switch (worldArray[i][j]) {
                     case "g":
-                        table[counter].style.backgroundImage = "url('/images/grass.png')";
+                        table[counter].style.backgroundImage = "url('images/grass.png')";
                         break;
 
                     case "f":
-                        table[counter].style.backgroundImage = "url('/images/fire.gif')";
+                        table[counter].style.backgroundImage = "url('images/fire.gif')";
                         break;
 
                     case "w":
-                    table[counter].style.backgroundImage = "url('/images/water.png')";
+                    table[counter].style.backgroundImage = "url('images/water.png')";
                         break;
 
                     case "p":
-                        table[counter].style.backgroundImage = "url('/images/player.png')";
+                        table[counter].style.backgroundImage = "url('images/player.png')";
                         break;
                 }
                 counter++;
