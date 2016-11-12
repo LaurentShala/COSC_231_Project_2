@@ -56,8 +56,8 @@ function Game(table) {
                 if (_water === 0) {
                     gameOver();
                 } else {
-                    _score++ ;
-                    _water-- ;
+                    _score++;
+                    _water--;
                     _inventory.removeChild(_inventory.childNodes[1]); // childNodes[0] is some sort of context node
                     spawn(_playerPos[0], _playerPos[1], "g");
                 }
@@ -66,7 +66,7 @@ function Game(table) {
             case "w":
                 _water++;
                 spawn(_playerPos[0], _playerPos[1], "g");
-                 _inventory.appendChild(document.createElement("div"));
+                _inventory.appendChild(document.createElement("div"));
                 break;
         }
     }
@@ -77,10 +77,10 @@ function Game(table) {
 
     // Spawns a fire randomly in the room
     function spawnFire() {
-        if (Math.random() < 0.04 ) {
+        if (Math.random() < 0.04) {
             var rand2 = randomInt(0, _height - 1);
             var rand1 = randomInt(0, _width - 1);
-            if ((rand1 === _playerPos[0] && rand2 === _playerPos[1])  || !(_grid[rand1][rand2] == "g")) {
+            if ((rand1 === _playerPos[0] && rand2 === _playerPos[1]) || !(_grid[rand1][rand2] == "g")) {
                 return;
             }
             spawn(rand1, rand2, "f");
@@ -89,7 +89,7 @@ function Game(table) {
 
     // Spawns water randomly in the room
     function spawnWater() {
-        if ( Math.random() < 0.032 ) {
+        if (Math.random() < 0.032) {
             var rand2 = randomInt(0, _height - 1);
             var rand1 = randomInt(0, _width - 1);
             if ((rand1 === _playerPos[0] && rand2 === _playerPos[1]) || !(_grid[rand1][rand2] == "g")) {
@@ -103,42 +103,44 @@ function Game(table) {
     // Ends the game setting the highscore in a cookie
     function gameOver() {
         clearInterval(_game);
+        _game = null;
         alert("DIE");
 
     }
 
     // Key stuff found on https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
     window.addEventListener("keydown", function(event) {
-        if (event.defaultPrevented) {
+        if (event.defaultPrevented || _game === null) {
             return; // Do nothing if the event was already processed
+        } else {
+
+            switch (event.key) {
+                case "w": //w
+                    if (_playerPos[0] > 0) {
+                        _playerPos[0] = _playerPos[0] - 1;
+                    }
+                    break;
+
+                case "a": //a
+                    if (_playerPos[1] > 0) {
+                        _playerPos[1] = _playerPos[1] - 1;
+                    }
+                    break;
+
+                case "s": //s
+                    if (_playerPos[0] < _height - 1) {
+                        _playerPos[0] = _playerPos[0] + 1;
+                    }
+                    break;
+
+                case "d": //d
+                    if (_playerPos[1] < _width - 1) {
+                        _playerPos[1] = _playerPos[1] + 1;
+                    }
+                    break;
+            }
+            gameTick();
         }
-
-        switch (event.key) {
-            case "w": //w
-                if (_playerPos[0] > 0) {
-                    _playerPos[0] = _playerPos[0] - 1;
-                }
-                break;
-
-            case "a": //a
-                if (_playerPos[1] > 0) {
-                    _playerPos[1] = _playerPos[1] - 1;
-                }
-                break;
-
-            case "s": //s
-                if (_playerPos[0] < _height - 1) {
-                    _playerPos[0] = _playerPos[0] + 1;
-                }
-                break;
-
-            case "d": //d
-                if (_playerPos[1] < _width - 1) {
-                    _playerPos[1] = _playerPos[1] + 1;
-                }
-                break;
-        }
-        gameCheck();
     });
 
     return obj;
@@ -160,7 +162,7 @@ function Draw() {
     }
 
     function drawScore(score) {
-      document.querySelector("#test2").innerHTML = '<h2>' + "Score: " + score + '</h2>';
+        document.querySelector("#test2").innerHTML = '<h2>' + "Score: " + score + '</h2>';
     }
 
     function draw(worldArray, playerPosArray) {
