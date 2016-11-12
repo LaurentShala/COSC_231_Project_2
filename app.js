@@ -64,6 +64,8 @@ function Game(table) {
             case "w":
                 _water++;
                 spawn(_playerPos[0], _playerPos[1], "g");
+
+                 document.querySelector("#inventory").appendChild(document.createElement("div"));
                 // document.querySelector("#inventory").innerHTML = '<tr id="inv"><td></td></tr>';
                 break;
         }
