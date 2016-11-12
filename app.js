@@ -6,6 +6,7 @@ function Game(table) {
         _width,
         _height,
         _hiScore,
+        _inventory = document.querySelector("#inventory"),
         _score = 0, // number of fires put out
         _water = 0,
         _timer = 0,
@@ -25,7 +26,7 @@ function Game(table) {
                 _grid[i][j] = "g";
             }
         }
-        _game = setInterval(gameTick, 100);
+        _game = setInterval(gameTick, 500);
     }
 
     // Randomly spawn fires and spawn water when nessisary
@@ -55,8 +56,9 @@ function Game(table) {
                 if (_water === 0) {
                     gameOver();
                 } else {
-                    _score++;
-                    _water--;
+                    _score++ ;
+                    _water-- ;
+                    _inventory.removeChild(_inventory.childNodes[1]); // childNodes[0] is some sort of context node
                     spawn(_playerPos[0], _playerPos[1], "g");
                 }
                 break;
@@ -64,9 +66,7 @@ function Game(table) {
             case "w":
                 _water++;
                 spawn(_playerPos[0], _playerPos[1], "g");
-
-                 document.querySelector("#inventory").appendChild(document.createElement("div"));
-                // document.querySelector("#inventory").innerHTML = '<tr id="inv"><td></td></tr>';
+                 _inventory.appendChild(document.createElement("div"));
                 break;
         }
     }
@@ -180,7 +180,7 @@ function Draw() {
                         break;
 
                     case "w":
-                    table[counter].style.backgroundImage = "url('images/water.png')";
+                        table[counter].style.backgroundImage = "url('images/water.png')";
                         break;
 
                     case "p":
@@ -193,7 +193,7 @@ function Draw() {
 
         // document.querySelector("#test").innerHTML = worldArray.join('<br />');
 
-        //console.log(worldArray.join('\n'));
+        // console.log(worldArray.join('\n'));
 
     }
 
