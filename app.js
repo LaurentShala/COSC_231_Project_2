@@ -5,9 +5,10 @@ function Game(table) {
         _game,
         _width,
         _height,
-        _hiScore,
+        _key,
         _inventory = document.querySelector("#inventory"),
         _score = 0, // number of fires put out
+        _hiScore = localStorage.getItem("_hiScore") || 0,
         _water = 0,
         _timer = 0,
         _draw = new Draw(table),
@@ -15,7 +16,7 @@ function Game(table) {
             start: start
         };
 
-    // Loads the highscore in from a cookie
+    // Loads the highscore in from local storage
     // Layout the grid
     function start() {
         _height = document.querySelectorAll("#" + table + " tr").length;
@@ -26,15 +27,17 @@ function Game(table) {
                 _grid[i][j] = "g";
             }
         }
-        _game = setInterval(gameTick, 500);
+        _game = setInterval(gameTick, 100);
     }
 
     // Randomly spawn fires and spawn water when nessisary
     // JSON Deep copy hack found on http://stackoverflow.com/questions/3978492/javascript-fastest-way-to-duplicate-an-array-slice-vs-for-loop
     function gameTick() {
-        spawnWater();
-        spawnFire();
+        movePlayer(_key);
+        //BUG_FIX _key = null;
         gameCheck();
+        spawn.water();
+        spawn.fire();
 
         var newarr = JSON.parse(JSON.stringify(_grid)); //Deep copy of the array
         _draw.draw(newarr, _playerPos);
@@ -76,7 +79,7 @@ function Game(table) {
     }
 
     // Spawns a fire randomly in the room
-    function spawnFire() {
+    spawn.fire = function() {
         if (Math.random() < 0.04) {
             var rand2 = randomInt(0, _height - 1);
             var rand1 = randomInt(0, _width - 1);
@@ -88,7 +91,7 @@ function Game(table) {
     }
 
     // Spawns water randomly in the room
-    function spawnWater() {
+    spawn.water = function() {
         if (Math.random() < 0.032) {
             var rand2 = randomInt(0, _height - 1);
             var rand1 = randomInt(0, _width - 1);
@@ -97,15 +100,46 @@ function Game(table) {
             }
             spawn(rand1, rand2, "w");
         }
-
     }
 
     // Ends the game setting the highscore in a cookie
     function gameOver() {
+        if (_score > _hiScore) {
+            alert("Congrats you got the new highscore of: " + _score);
+            localStorage.setItem("_hiScore", _score);
+        } else {
+            alert("You died and didn't get the high score ohh well");
+        }
         clearInterval(_game);
         _game = null;
-        alert("DIE");
+    }
 
+    function movePlayer(key) {
+        switch (key) {
+            case "w": //w
+                if (_playerPos[0] > 0) {
+                    _playerPos[0] = _playerPos[0] - 1;
+                }
+                break;
+
+            case "a": //a
+                if (_playerPos[1] > 0) {
+                    _playerPos[1] = _playerPos[1] - 1;
+                }
+                break;
+
+            case "s": //s
+                if (_playerPos[0] < _height - 1) {
+                    _playerPos[0] = _playerPos[0] + 1;
+                }
+                break;
+
+            case "d": //d
+                if (_playerPos[1] < _width - 1) {
+                    _playerPos[1] = _playerPos[1] + 1;
+                }
+                break;
+        }
     }
 
     // Key stuff found on https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
@@ -113,33 +147,7 @@ function Game(table) {
         if (event.defaultPrevented || _game === null) {
             return; // Do nothing if the event was already processed
         } else {
-
-            switch (event.key) {
-                case "w": //w
-                    if (_playerPos[0] > 0) {
-                        _playerPos[0] = _playerPos[0] - 1;
-                    }
-                    break;
-
-                case "a": //a
-                    if (_playerPos[1] > 0) {
-                        _playerPos[1] = _playerPos[1] - 1;
-                    }
-                    break;
-
-                case "s": //s
-                    if (_playerPos[0] < _height - 1) {
-                        _playerPos[0] = _playerPos[0] + 1;
-                    }
-                    break;
-
-                case "d": //d
-                    if (_playerPos[1] < _width - 1) {
-                        _playerPos[1] = _playerPos[1] + 1;
-                    }
-                    break;
-            }
-            gameTick();
+            _key = event.key;
         }
     });
 
@@ -192,11 +200,6 @@ function Draw() {
                 counter++;
             }
         }
-
-        // document.querySelector("#test").innerHTML = worldArray.join('<br />');
-
-        // console.log(worldArray.join('\n'));
-
     }
 
     return obj;
