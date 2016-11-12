@@ -11,6 +11,7 @@ function Game(table) {
         _hiScore = localStorage.getItem("_hiScore") || 0,
         _water = 0,
         _timer = 0,
+        _tds = document.querySelectorAll("td"),
         _draw = new Draw(table),
         obj = {
             start: start
@@ -34,13 +35,12 @@ function Game(table) {
     // JSON Deep copy hack found on http://stackoverflow.com/questions/3978492/javascript-fastest-way-to-duplicate-an-array-slice-vs-for-loop
     function gameTick() {
         movePlayer(_key);
-        //BUG_FIX _key = null;
         gameCheck();
         spawn.water();
         spawn.fire();
 
         var newarr = JSON.parse(JSON.stringify(_grid)); //Deep copy of the array
-        _draw.draw(newarr, _playerPos);
+        _draw.draw(newarr, _playerPos, _tds);
 
         //FIXME I dont know if this is the best way to do it
         _draw.drawScore(_score)
@@ -140,6 +140,7 @@ function Game(table) {
                 }
                 break;
         }
+        //BUG_FIX _key = null;
     }
 
     // Key stuff found on https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
@@ -173,9 +174,9 @@ function Draw() {
         document.querySelector("#test2").innerHTML = '<h2>' + "Score: " + score + '</h2>';
     }
 
-    function draw(worldArray, playerPosArray) {
+    function draw(worldArray, playerPosArray, table) {
         var counter = 0;
-        var table = document.querySelectorAll("td");
+        //var table = document.querySelectorAll("td");
         worldArray[playerPosArray[0]][playerPosArray[1]] = "p";
 
         for (var i = 0; i < worldArray.length; i++) {
