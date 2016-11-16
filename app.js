@@ -140,7 +140,6 @@ function Game(table) {
                 }
                 break;
         }
-        //BUG_FIX _key = null;
     }
 
     // Key stuff found on https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
