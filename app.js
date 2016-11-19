@@ -6,14 +6,14 @@ function Game(table) {
         _width,
         _height,
         _key,
+        _countDown,
         _inventory = document.querySelector("#inventory"),
         _score = 0, // number of fires put out
         _hiScore = localStorage.getItem("_hiScore") || 0,
         _water = 0,
-        _timer = 0,
+        _timer = 60,
         _tds = document.querySelectorAll("td"),
-        _draw = new Draw(table),
-        obj = {
+        _draw = new Draw(table), obj = {
             start: start
         };
 
@@ -28,6 +28,7 @@ function Game(table) {
                 _grid[i][j] = "g";
             }
         }
+        _countDown = setInterval(countDown, 1000);
         _game = setInterval(gameTick, 100);
     }
 
@@ -44,6 +45,15 @@ function Game(table) {
 
         //FIXME I dont know if this is the best way to do it
         _draw.drawScore(_score)
+    }
+
+    function countDown () {
+      _timer--;
+      _draw.drawTimer(_timer);
+        if(!_timer){
+            gameOver(_timer);
+            clearInterval(_countDown);
+        }
     }
 
     function randomInt(min, max) {
@@ -166,11 +176,16 @@ function Game(table) {
 function Draw() {
     var obj = {
         draw: draw,
-        drawScore: drawScore
+        drawScore: drawScore,
+        drawTimer: drawTimer
     }
 
     function drawScore(score) {
-        document.querySelector("#test2").innerHTML = '<h2>' + "Score: " + score + '</h2>';
+        document.querySelector("#test").innerHTML = '<h2>' + "Score: " + score + '</h2>';
+    }
+
+    function drawTimer(count) {
+        document.querySelector("#countDown").innerHTML = '<h2>' + "Time: " + count + '</h2>';
     }
 
     function draw(worldArray, playerPosArray, table) {
