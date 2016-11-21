@@ -29,6 +29,7 @@ function Game(table) {
                 _grid[i][j] = "g";
             }
         }
+        countDown();
         _countDown = setInterval(countDown, 1000);
         _game = setInterval(gameTick, 100);
     }
