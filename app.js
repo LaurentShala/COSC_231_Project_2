@@ -13,7 +13,8 @@ function Game(table) {
         _water = 0,
         _timer = 60,
         _tds = document.querySelectorAll("td"),
-        _draw = new Draw(table), obj = {
+        _draw = new Draw(table),
+        obj = {
             start: start
         };
 
@@ -42,17 +43,14 @@ function Game(table) {
 
         var newarr = JSON.parse(JSON.stringify(_grid)); //Deep copy of the array
         _draw.draw(newarr, _playerPos, _tds);
-
-        //FIXME I dont know if this is the best way to do it
         _draw.drawScore(_score)
     }
 
-    function countDown () {
-      _timer--;
-      _draw.drawTimer(_timer);
-        if(!_timer){
-            gameOver(_timer);
-            clearInterval(_countDown);
+    function countDown() {
+        _timer--;
+        _draw.drawTimer(_timer);
+        if (!_timer) {
+            gameOver("You ran out of time and didn't get the highscore");
         }
     }
 
@@ -67,7 +65,7 @@ function Game(table) {
         switch (_grid[_playerPos[0]][_playerPos[1]]) {
             case "f":
                 if (_water === 0) {
-                    gameOver();
+                    gameOver("You died in a fire and didn't even get the highscore");
                 } else {
                     _score++;
                     _water--;
@@ -113,15 +111,17 @@ function Game(table) {
     }
 
     // Ends the game setting the highscore in a cookie
-    function gameOver() {
+    function gameOver(msg) {
         if (_score > _hiScore) {
             alert("Congrats you got the new highscore of: " + _score);
             localStorage.setItem("_hiScore", _score);
         } else {
-            alert("You died and didn't get the high score ohh well");
+            alert(msg);
         }
         clearInterval(_game);
+        clearInterval(_countDown);
         _game = null;
+        _countDown = null;
     }
 
     function movePlayer(key) {
@@ -163,14 +163,6 @@ function Game(table) {
 
     return obj;
 }
-
-
-
-
-
-
-
-
 
 //Visual Module
 function Draw() {
@@ -216,6 +208,5 @@ function Draw() {
             }
         }
     }
-
     return obj;
 }
