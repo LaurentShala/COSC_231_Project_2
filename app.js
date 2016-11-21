@@ -112,16 +112,16 @@ function Game(table) {
 
     // Ends the game setting the highscore in a cookie
     function gameOver(msg) {
+        clearInterval(_game);
+        clearInterval(_countDown);
+        _game = null;
+        _countDown = null;
         if (_score > _hiScore) {
             alert("Congrats you got the new highscore of: " + _score);
             localStorage.setItem("_hiScore", _score);
         } else {
             alert(msg);
         }
-        clearInterval(_game);
-        clearInterval(_countDown);
-        _game = null;
-        _countDown = null;
     }
 
     function movePlayer(key) {
